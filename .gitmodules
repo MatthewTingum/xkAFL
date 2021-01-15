@@ -1,0 +1,3 @@
+[submodule "xqemu-kafl"]
+	path = xqemu-kafl
+	url = https://github.com/MatthewTingum/xqemu-kafl.git
