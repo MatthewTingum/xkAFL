@@ -4,3 +4,6 @@
 [submodule "xkAFL-KVM"]
 	path = xkAFL-KVM
 	url = https://github.com/MatthewTingum/xkAFL-KVM.git
+[submodule "nxdk"]
+	path = nxdk
+	url = https://github.com/XboxDev/nxdk.git
