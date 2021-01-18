@@ -12,15 +12,18 @@ and
 - An Intel CPU supporting Intel Processor Trace
 - Python 3
 
+```sh
 `git clone --recurse-submodules -j `nproc` https://github.com/MatthewTingum/xkAFL.git`
+```
 
 ### Building XQEMU
 XQEMU has been patched to support kAFL.
 
 Install XQEMU build dependencies:
 ```sh
-sudo apt-get update
-sudo apt-get install git build-essential pkg-config libsdl2-dev \
+sudo apt update
+
+sudo apt install git build-essential pkg-config libsdl2-dev \
 libepoxy-dev zlib1g-dev libpixman-1-dev
 ```
 
@@ -62,15 +65,28 @@ $ dmesg|grep VMX
 kAFL-Fuzzer/kafl_fuzz.py
 ```
 
+This won't do anything as no arguments have been supplied. It will however
+indicate any missing python dependencies.
+
 Install python dependencies as needed.
 
-# TODO: Set relative path to xqemu binary in kAFL ini
+The kAFL fuzzer requires an absolute path to the XQEMU.
+Edit the `qemu_kafl_location` parameter in `xkAFL-KVM/kAFL-Fuzzer/kafl.ini`.
+This appears to require an absolute path.
+In relation to this repo, the path is: `xqemu-kafl/i386-softmmu/qemu-system-i386`
+
 # TODO: Set relative paths in modified common.py
 
 
 ### Building the test harness
-# TODO: This has not been merged to main yet
+Install nxdk dependencies
+```sh
+sudo apt install build-essential cmake flex bison clang lld git llvm
+```
 
+```sh
+cd harness/demo_harness/ && make
+```
 
 ### XQEMU Required Files
 XQEMU requires an MCPX boot rom image, a kernel image, and a hard disk image.
@@ -91,19 +107,23 @@ xkAFL-vm/xbox_hdd.qcow2
 ### Generating a snapshot
 Create an overlay file of the xbox hard disk image:
 ```sh
-qemu-img create -f qcow2 -b xkAFL-vm/xbox_hdd.qcow2 xkAFL-vm/overlay_0.qcow2
+qemu-img create -f qcow2 -b xkAFL-vm/xbox_hdd.qcow2 overlay_0.qcow2 && mv overlay_0.qcow2 xkAFL-vm/
 ```
 
 Assuming everything has been built and configured correctly,
 the sample harness can be tested.
 
 
-Run `demo_snapshot.sh`. XQEMU will boot with GUI enabled. After running through the boot
+Run `sample_firstboot.sh`. XQEMU will boot with GUI enabled. After running through the boot
 animation, the sample harness program will run and automatically take a snapshot.
 XQEMU will close by itself.
 
-Veryify that a *snapshot* has been created.
+Verify that a *snapshot* has been created.
+```sh
+qemu-img info ./xkAFL-vm/overlay_0.qcow2
+```
 
+You shoud see a `Snapshot list` populated with a `kafl` snapshot
 
 ### Fuzzing
 With a snapshot created, fuzzing can begin.
@@ -111,7 +131,7 @@ With a snapshot created, fuzzing can begin.
 Run `demo_fuzz.sh`. A kAFL banner will display in the terminal.
 Open another terminal and run:
 ```sh
-./kAFL/kAFL-Fuzzer/kafl_gui.py ./work/
+./xkAFL-KVM/kAFL-Fuzzer/kafl_gui.py ./work/
 ```
 
 A GUI will appear displaying fuzzing statistics.
