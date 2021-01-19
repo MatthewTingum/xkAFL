@@ -89,9 +89,9 @@ int main(void)
     /* this hypercall will generate a VM snapshot for the fuzzer and subsequently terminate QEMU */
     kAFL_hypercall(HYPERCALL_KAFL_LOCK, 0);
 
-    // Slow down for race condition
+    // Slow down for race condition (kAFL bug)
     volatile unsigned long long t;
-    for (t = 0; t < 1000*1000*10; ++t) {}
+    for (t = 0; t < 1000*1000*1000; ++t) {}
 
     //debugPrint("kAFL lock acquired!\n");
 

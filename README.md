@@ -97,7 +97,7 @@ guide for details.
 This repo contains dummy (empty) files in place of the XQEMU required files.
 Once you have obtained the required files, overwrite the dummy files with the real ones.
 The files needing to be replaced are:
-```
+```sh
 xkAFL-vm/mcpx_1.0.bin
 xkAFL-vm/bios.bin
 xkAFL-vm/xbox_hdd.qcow2
@@ -107,7 +107,7 @@ xkAFL-vm/xbox_hdd.qcow2
 ### Generating a snapshot
 Create an overlay file of the xbox hard disk image:
 ```sh
-qemu-img create -f qcow2 -b xkAFL-vm/xbox_hdd.qcow2 overlay_0.qcow2 && mv overlay_0.qcow2 xkAFL-vm/
+cd xkAFL-vm && qemu-img create -f qcow2 -b ./xbox_hdd.qcow2 overlay_0.qcow2
 ```
 
 Assuming everything has been built and configured correctly,
@@ -141,3 +141,4 @@ As crashes are found, the payload used to trigger them will appear in
 The sample should generate two unique crashes:
 - A payload beginning with the character `X`
 - A payload beginning with the characters `BX`
+  - TODO
